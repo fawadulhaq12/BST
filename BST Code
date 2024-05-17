@@ -1,0 +1,105 @@
+#include<iostream>
+using namespace std;
+
+//structure and value for data left right child and parent address
+struct Node{
+	
+	int value;
+	Node* left;
+	Node* right;
+	Node* parent;
+	
+};
+
+//insert function
+Node* insert(Node* node, int value){
+	if(node==NULL){
+		node=new Node; //if tree has no node
+		node->value=value;
+		//if it is first node so it parent and left right will be null
+		node->left=NULL;
+		node->right=NULL;
+		node->parent=NULL;
+	}
+	
+	else if(node->value<value){
+		node->right=insert(node->right,value); //if the value is larger than go to right side and add it there by recursive call
+		node->right->parent=node; //parent of new node at right will be first node 
+	}
+	
+	else{
+		node->left=insert(node->left,value);
+		node->left->parent=node;
+	}
+	return node;
+}
+
+void preOrder(Node* node){
+	if(node!=NULL){
+		cout<<node->value<<" "; //traversing parent first
+		preOrder(node->left); // than left node
+		preOrder(node->right);// and at last the right node
+	}
+}
+
+void inOrder(Node* node){
+	if(node!=NULL){
+		inOrder(node->left); //traversing left node first
+		cout<<node->value<"  "; //than travering parent node
+		inOrder(node->right); // than travering right node
+	}
+}
+
+void postOrder(Node* node){
+	if(node!=NULL){
+		postOrder(node->left);
+		postOrder(node->right);
+		cout<<node->value<<" ";
+		
+	}
+}
+
+//function to search in BST
+Node* search( Node* node, int value){
+	//checking if node is null or value is present at first node
+	if(node==NULL||node->value==value){
+		return node;
+	}
+	if(node->value<value){
+		//if value at parent node is less than value we want to search than move on right of BST
+		return search(node->right,value);
+	}
+	//if value at parent node is large than value we want to search than move on left of BST
+	return search(node->left,value);
+}
+//main function
+int main(){
+	Node*root=NULL;
+		root=insert(root,5);
+			root=insert(root,8);
+				root=insert(root,2);
+					root=insert(root,3);
+						root=insert(root,9);
+							root=insert(root,20);
+								root=insert(root,11);
+							cout<<"Pre order"<<" ";
+								preOrder(root);
+								cout<<endl;
+								cout<<"Post order"<<" ";
+								postOrder(root);
+								cout<<endl;
+									cout<<"In order"<<" ";
+								inOrder(root);
+								cout<<endl;
+								int num;
+								cout<<"Enter a number to search :";
+								cin>>num;
+								Node* found=search(root,num);
+								if(found!=NULL){
+									cout<<"Value found:"<<found->value<<endl;
+									
+								}	
+								else{
+									cout<<"Not found";
+								}
+}
